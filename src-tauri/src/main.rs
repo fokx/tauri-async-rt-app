@@ -32,7 +32,7 @@ async fn main() {
                 .bind(("0.0.0.0", 4804))
                 .unwrap()
                 .run();
-
+        let server_handle = server.handle();
 
         tokio::select! {
             _ = async {
@@ -42,6 +42,8 @@ async fn main() {
             } => {}
             _ = rx => {
                 println!("terminating async task");
+                server_handle.stop(false).await;
+                println!("async task terminated");
             }
         }
     }
